@@ -15,7 +15,7 @@ elseif ($image_info.Height -le $image_info.Width) {
 # Set CQT width to ⅓
 if ($ihw %3 -eq 0) {$CQT_width = $ihw/3}
 else {$CQT_width = ($ihw-$ihw%3)/3}
-if ($ihw %2 -eq 1) {$ihw+1}
+# if ($ihw %2 -eq 1) {$ihw+1}  *I don't know why it is here
 
 $audio = Read-Host -Prompt 'Audio File'
 $filter = "[1:0]showcqt=s=$CQT_width`x$ihw:bar_g=2:sono_g=2:fps=30[vcqt],[0:0]scale=$ihw`:$ihw,format=yuv420p,fps=30[v];[v][vcqt]hstack[vo]"
