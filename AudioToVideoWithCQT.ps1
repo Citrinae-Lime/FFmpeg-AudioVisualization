@@ -22,17 +22,18 @@ else {$CQT_width = ($ihw-$ihw%3)/3
 
 $audio = Read-Host -Prompt 'Audio File'
 $filter = "[1:0]showcqt=s=$CQT_width`x$ihw:bar_g=2:sono_g=2:fps=30[vcqt],[0:0]scale=$ihw`:$ihw,format=yuv420p,fps=30[v];[v][vcqt]hstack[vo]"
+# Is 256kbps@opus and h.265 in mkv container, you can change it if you want.
+$output_opitons = "-map '[vo]' -map 1:0 -c:a libopus -b:a 256k -c:v libx265 -shortest"
 
-# Is 320kbps@opus and h.265 in mkv container, you can change it if you want.
 # For folder, please add a \ after the path.
 if ($audio -match '\\$') {
     foreach ($audio_file in Get-ChildItem $audio -Exclude Cover.*) {
         $output_file = $audio_file.Name -replace "\.\w*",".mkv"
-        ffmpeg -hide_banner -loop 1 -i $image -i $audio -filter_complex $filter -map '[vo]' -map 1:0 -c:a libopus -b:a 300k -c:v libx265 -shortest "$output_file"
+        ffmpeg -hide_banner -loop 1 -i $image -i $audio_file.fullname -filter_complex $filter $output_opitons "$output_file"
     }
 }
 else {
     $output_file = $audio -replace "\.\w*",".mkv"
-    ffmpeg -hide_banner -loop 1 -i $image -i $audio -filter_complex $filter -map '[vo]' -map 1:0 -c:a libopus -b:a 320k -c:v libx265 -shortest "$output_file"
+    ffmpeg -hide_banner -loop 1 -i $image -i $audio -filter_complex $filter $output_opitons "$output_file"
 }
 Read-Host -Prompt "Press Enter to exit"
