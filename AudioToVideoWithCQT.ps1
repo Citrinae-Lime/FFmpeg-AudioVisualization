@@ -11,25 +11,22 @@ if ($image_info.Width %2 -eq 0) {$iw = $image_info.Width}
     else {$iw = $image_info.Width-1}
 
 # Set CQT width to ⅓
-if ($iw %3 -eq 0) {$CQT_width = $iw/3}
-else {$CQT_width = ($iw-$iw%3)/3
-      if ($CQT_width%2 -eq 1) {$CQT_width += 1}
-}
+$CQT_width = [int]($ih/0.75)-$iw
 
 $audio = Read-Host -Prompt 'Audio File'
-$filter = "[1:0]showcqt=s=$CQT_width`x$ih`:bar_g=2:sono_g=2[vcqt],[0:0]scale=$iw`:$ih,format=yuv420p[v];[v][vcqt]hstack[vo]"
+$filter = "[1:0]showcqt=s=$CQT_width`x$ih`:bar_g=2:sono_g=2[vcqt],[0:0]scale=$iw`:$ih,format=yuv420p[v];[v][vcqt]hstack=shortest=1[vo]"
 # Is 256kbps@opus and x265 in mkv container, you can change it if you want.
-$output_opitons = "-map '[vo]' -map 1:0 -c:a libopus -b:a 256k -c:v libx265 -shortest"
+$output_opitons = "-map '[vo]' -map 1:0 -c:a libopus -b:a 256k -c:v libx265"
 
 # For folder, please add a \ after the path.
 if ($audio -match '\\$') {
     foreach ($audio_file in Get-ChildItem $audio -Exclude Cover.*) {
-        $output_file = $audio_file.Name -replace "\.\w*",".mkv"
+        $output_file = $audio_file.Name -replace '\.\w*$','.mkv'
         ffmpeg -hide_banner -loop 1 -i $image -i $audio_file.fullname -filter_complex $filter $output_opitons "$output_file"
     }
 }
 else {
-    $output_file = $audio -replace "\.\w*",".mkv"
+    $output_file = $audio -replace '\.\w*$','.mkv'
     ffmpeg -hide_banner -loop 1 -i $image -i $audio -filter_complex $filter $output_opitons "$output_file"
 }
-Read-Host -Prompt "Press Enter to exit"
+Read-Host -Prompt 'Press Enter to exit'
