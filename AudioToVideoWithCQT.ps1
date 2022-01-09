@@ -1,7 +1,7 @@
 # You need FFmpeg to use this!
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process
 add-type -AssemblyName System.Drawing
-$image = Read-Host -Prompt 'Audio Cover'
+$image = $(Read-Host -Prompt 'Attach pic') -replace '"',''
 $image_info = New-Object System.Drawing.Bitmap $image       # Get image detail
 
 # Set to divisible by 2
@@ -14,7 +14,7 @@ if ($image_info.Width %2 -eq 0) {$iw = $image_info.Width}
 $CQT_width = [int]($ih/0.75)-$iw
 if ($CQT_width %2 -eq 1) {$CQT_width -= 1}
 
-$audio = Read-Host -Prompt 'Audio File'
+$audio = $(Read-Host -Prompt 'Audio file') -replace '"',''
 $filter = @"
           [1]showcqt=s=$CQT_width`x$ih`:bar_g=2:sono_g=2[vcqt],
           [0]scale=$iw`:$ih[v];
@@ -24,10 +24,12 @@ $filter = @"
 # Is 256kbps@opus and x265 in mkv container, you can change it if you want.
 # Check the extension replacement rule!
 # For folder, please add a \ after the path.
+
 if ($audio -match '\\$') {
-    foreach ($audio_file in Get-ChildItem $audio -Exclude cover.*) {
-        $output_file = $audio_file.Name -replace '.flac|.wav|.mp3|.m4a','.mkv'
-        ffmpeg.exe -hide_banner -loop 1 -i $image -i $audio_file.fullname -filter_complex $filter -map '[vo]' -map 1 -c:a libopus -b:a 256k -c:v libx265 $output_file
+    Set-Location $audio
+    foreach ($audio_file in Get-ChildItem -Exclude cover.*) {
+        $output_file = $audio_file -replace '.flac|.wav|.mp3|.m4a','.mkv'
+        ffmpeg.exe -hide_banner -loop 1 -i $image -i $audio_file -filter_complex $filter -map '[vo]' -map 1 -c:a libopus -b:a 256k -c:v libx265 $output_file
     }
 }
 else {
