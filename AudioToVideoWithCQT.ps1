@@ -15,11 +15,9 @@ $CQT_width = [int]($ih/0.75)-$iw
 if ($CQT_width %2 -eq 1) {$CQT_width -= 1}
 
 $audio = $(Read-Host -Prompt 'Audio file') -replace '"',''
-$filter = @"
-          [1]showcqt=s=$CQT_width`x$ih`:bar_g=2:sono_g=2[vcqt],
-          [0]scale=$iw`:$ih[v];
-          [v][vcqt]hstack=shortest=1[vo]
-          "@
+$filter = @"[1]showcqt=s=$CQT_width`x$ih`:bar_g=2:sono_g=2[vcqt],
+            [0]scale=$iw`:$ih[v];
+            [v][vcqt]hstack=shortest=1[vo]"@
 
 # Is 256kbps@opus and x265 in mkv container, you can change it if you want.
 # Check the extension replacement rule!
