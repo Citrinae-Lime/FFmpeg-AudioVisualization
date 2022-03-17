@@ -27,11 +27,11 @@ if ($audio -match '\\$') {
     Set-Location $audio
     foreach ($audio_file in Get-ChildItem -Exclude cover.*) {
         $output_file = $audio_file -replace '.flac|.wav|.mp3|.m4a','.webm'
-        ffmpeg.exe -hide_banner -loop 1 -i $image -i $audio_file -filter_complex $filter -map '[vo]' -map 1 -c:a libopus -b:a 256k -c:v libvpx-vp9 $output_file
+        ffmpeg.exe -hide_banner -loop 1 -i $image -i $audio_file -filter_complex $filter -map '[vo]' -map '1:0' -c:a libopus -b:a 256k -c:v libvpx-vp9 $output_file
     }
 }
 else {
     $output_file = $audio -replace '.flac|.wav|.mp3|.m4a','.webm'
-    ffmpeg.exe -hide_banner -loop 1 -i $image -i $audio -filter_complex $filter -map '[vo]' -map 1 -c:a libopus -b:a 256k -c:v libvpx-vp9 $output_file
+    ffmpeg.exe -hide_banner -loop 1 -i $image -i $audio -filter_complex $filter -map '[vo]' -map '1:0' -c:a libopus -b:a 256k -c:v libvpx-vp9 $output_file
 }
 Read-Host -Prompt 'Press Enter to exit'
