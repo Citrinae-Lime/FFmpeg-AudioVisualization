@@ -16,4 +16,4 @@ ffmpeg.exe -hide_banner -i $p -i $v `
                  drawtext=fontcolor=F3F3F3:fontfile=Nexa.otf:fontsize=90:text=$text[ferqs];
                  [cover][ferqs]hstack[ui];
                  [bg][ui]overlay=x=(W-w)/2:y=(H-h)/2[v]" `
--map '[v]' -map '1:0' -c:a libopus -c:v libvpx-vp9 Ferqs_A2V.mkv
+-map '[v]' -map '1:0' -c:a libopus -c:v libvpx-vp9 -shortest Ferqs_A2V.mkv
