@@ -16,7 +16,7 @@ $CQT_width = [int]($ih/0.75)-$iw
 if ($CQT_width %2 -eq 1) {$CQT_width -= 1}
 
 $audio = $(Read-Host -Prompt 'Audio file') -replace '"',''
-$filter = "[1]showcqt=s=$CQT_width`x$ih`:bar_g=2:sono_g=2[vcqt],
+$filter = "[1]showcqt=s=$CQT_width`x$ih`:bar_g=2:sono_g=2:tc=0.5[vcqt],
            [0]$scale[vcqt]hstack=shortest=1[vo]"
 
 # Is 256kbps@opus and vp9 in webm container, you can change it if you want.
