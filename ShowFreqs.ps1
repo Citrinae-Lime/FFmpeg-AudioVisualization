@@ -1,13 +1,13 @@
-# Replace "input -f null" with your file path
-# Input audio
+# 将 "input -f null" 替换为你的文件路径。
+# 音频路径
 $a = "input -f null"
-# Input image
+# 图像路径
 $p = "input -f null"
-# Output resolution
+# 输出分辨率
 $width = 2560
 $height = [int]$width*0.5625  # 16:9; 0.75 for 4:3
 $UI_WH = [int]$width/2*0.8
-# Title
+# 标题（需指定字体文件，特殊字符需转义）
 $font = font.ttf
 $title = "A2V by FFmpeg"
 
@@ -20,4 +20,4 @@ ffmpeg.exe -hide_banner -i $p -i $a `
                  [bg][ui]overlay=x=(W-w)/2:y=(H-h)/2[v]" `
 -map '[v]' -map '1:a' -c:a libopus -c:v libvpx-vp9 -shortest Freqs_A2V.webm
 
-Read-Host -Prompt 'Press Enter to exit'
+Read-Host -Prompt '按任意键退出'
