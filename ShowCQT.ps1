@@ -6,14 +6,14 @@ $audio = "input -f null"
 add-type -AssemblyName System.Drawing
 $image_info = New-Object System.Drawing.Bitmap $image
 $ih = $image_info.Height
-if ($ih %2 -eq 1){$ih -= 1}
+$ih -= $ih%2
 $iw = $image_info.Width
-if ($iw %2 -eq 1) {$iw -= 1}
+$iw -= $iw%2
 if ($iw -ne $image_info.Width -or $ih -ne $image_info.Height) {$scale = "scale=$iw`:$ih[v];[v]"}
 
-# 将 CQT 的宽度设定为⅓（如果原文件是正方形）
-$CQT_width = [int]($ih/0.75)-$iw
-if ($CQT_width %2 -eq 1) {$CQT_width -= 1}
+# 将 CQT 的宽度设定为⅓
+$CQT_width = ($iw-$iw%3)/3
+$CQT_width -= $CQT_width%2
 
 $filter = "[1:a]showcqt=s=$CQT_width`x$ih`:bar_g=2:sono_g=2:tc=0.5[vcqt],
            [0]$scale[vcqt]hstack=shortest=1[vo]"
