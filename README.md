@@ -1,6 +1,6 @@
 # FFmpeg-AudioVisualization
 
-这些是使用FFmpeg创建音频可视化的PowerShell脚本，
+这些是使用 FFmpeg 创建音频可视化的 PowerShell 脚本，
 脚本以可视化使用的过滤器命名。  
 ~~脚本中出现的英语均为机翻。~~
 

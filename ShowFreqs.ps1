@@ -18,7 +18,7 @@ ffmpeg.exe -hide_banner -i $p -i $a `
 "color=c=$bg_color`:s=$width`x$height`:r=60[bg],
  [0]scale=$UI_WH`:$UI_WH,pad=w=iw+$($width/10):color=$bg_color[cover],
  [1:a]showfreqs=s=$UI_WH`x$UI_WH`:ascale=sqrt:colors=F3F3F3|F5F5F5:averaging=15:fscale=log,
-      drawtext=fontcolor=F4F4F4:fontfile=$font`:fontsize=86:text=$title[freq];
+      drawtext=fontcolor=F4F4F4:fontfile=$font`:fontsize=h/10:text=$title[freq];
  [cover][freq]hstack[ui];
  [bg][ui]overlay=x=(W-w)/2:y=(H-h)/2[v]" `
 -map '[v]' -map '1:a' -c:a copy -c:v libaom-av1 -shortest Freqs_A2V.mkv
