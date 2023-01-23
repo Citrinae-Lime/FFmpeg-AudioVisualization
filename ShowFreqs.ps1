@@ -20,7 +20,7 @@ $filters = @"
 [bg],
 
 [0]
-    scale = $UI_WH`:$UI_WH,
+    scale = -1:$UI_WH,
     pad = 
          w = iw+$($width/10)
         :color = random@0x00
@@ -32,11 +32,12 @@ $filters = @"
         :ascale = sqrt
         :colors = F3F3F3|F5F5F5
         :averaging = 15
+        :win_func = tukey
         :fscale = log,
     drawtext = 
          fontcolor = F4F4F4
         :fontfile = $font
-        :fontsize = 86
+        :fontsize = h/10
         :text = $title
 [freq];
 
