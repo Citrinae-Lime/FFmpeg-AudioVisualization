@@ -19,18 +19,16 @@ $filter = "[1:a]showcqt=s=$CQT_width`x$ih`:bar_g=2:sono_g=2:tc=0.5[vcqt],
            [0]$scale[vcqt]hstack=shortest=1[vo]"
 
 # 默认预设为 256kbps@opus 和 vp9 封装在 webm 格式, 你可随意更改。
-# 记得检查一下拓展名替换规则!
-# 对于多个输入，请将 \ 添加在输入路径后.
+# 记得检查一下拓展名!
+# 对于批量处理，请将 \ 添加在输入路径后。
 
 if ($audio -match '\\$') {
-    Set-Location $audio
-    foreach ($audio_file in Get-ChildItem -Exclude cover.*) {
-        $output_file = $audio_file -replace '.flac|.wav|.mp3|.m4a','.webm'
-        ffmpeg.exe -hide_banner -loop 1 -i $image -i $audio_file -filter_complex $filter -map '[vo]' -map '1:a' -c:a libopus -b:a 256k -c:v libvpx-vp9 $output_file
-    }
+    $audio_files = $(Get-ChildItem -Path $audio -Exclude cover.*).FullName
 }
-else {
-    $output_file = $audio -replace '.flac|.wav|.mp3|.m4a','.webm'
-    ffmpeg.exe -hide_banner -loop 1 -i $image -i $audio -filter_complex $filter -map '[vo]' -map '1:a' -c:a libopus -b:a 256k -c:v libvpx-vp9 $output_file
+else {$audio_files = $audio}
+
+foreach ($audio_file in $audio_files) {
+    $output_file = $audio_file -replace '.flac|.wav|.mp3|.m4a','.webm'
+    ffmpeg.exe -hide_banner -loop 1 -i $image -i $audio_file -filter_complex $filter -map '[vo]' -map '1:a' -c:a libopus -vbr 2 -b:a 256k -c:v libvpx-vp9 $output_file
 }
 Read-Host -Prompt '按任意键退出'

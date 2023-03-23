@@ -6,8 +6,8 @@ $p = "input -f null"
 
 # 输出分辨率
 $width = 2560
-$height = [int]$width*0.5625  # 16:9; 0.75 for 4:3
-$UI_WH = [int]$width/2*0.8
+$height = [int]($width*0.5625)  # 16:9; 0.75 for 4:3
+$UI_WH = [int]($width/2*0.8)
 # 标题（需指定字体文件，特殊字符需转义）
 $font = "font.ttf"
 $title = "A2V by FFmpeg"
