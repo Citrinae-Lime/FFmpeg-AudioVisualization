@@ -1,4 +1,4 @@
-# 将 "input -f null" 替换为你的文件路径。
+﻿# 将 "input -f null" 替换为你的文件路径。
 # 音频路径
 $a = "input -f null"
 # 图像路径
@@ -51,9 +51,10 @@ $filters = @"
         y = (H-h)/2
 [v]
 "@
+$o = $a -replace '.flac|.wav|.mp3|.m4a','.mkv'
 
 ffmpeg.exe -hide_banner -i $p -i $a `
 -filter_complex $filters -map '[v]' -map '1:a' `
--c:a copy -c:v librav1e -shortest Freqs_A2V.mkv
+-c:a copy -c:v librav1e -shortest $o
 
 Read-Host -Prompt '按任意键退出'

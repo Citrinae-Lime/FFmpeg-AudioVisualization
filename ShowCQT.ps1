@@ -1,4 +1,4 @@
-# 将 "input -f null" 替换为你的文件路径。
+﻿# 将 "input -f null" 替换为你的文件路径。
 $image = "input -f null"
 $audio = "input -f null"
 
