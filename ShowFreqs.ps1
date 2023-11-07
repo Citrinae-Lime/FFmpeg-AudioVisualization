@@ -12,11 +12,16 @@ $UI_WH = [int]($width/2*0.8)
 $bg_color = [System.Drawing.Color]::FromArgb(36, 41, 46)
 # Title
 $font = "Nexa.otf"
-$title = "A2V use FFmpeg&showfreqs"
+$title = ""
 
 $relativeLuminance = 0.2126*$bg_color.R + 0.7152*$bg_color.G + 0.0722*$bg_color.B
-if ($relativeLuminance -ge 0.5){$UI_color = "0x171717"}
+if ($relativeLuminance -ge 0.5) {$UI_color = "0x171717"}
 else {$UI_color = "0xF4F4F4"}
+
+# If no title is given get it from the tag
+if ($title -eq "") {$title = ffprobe.exe -v error -show_entries format_tags=title -of default=noprint_wrappers=1:nokey=1 $a}
+
+$o = $a -replace '.flac|.wav|.mp3|.m4a','.mkv'
 
 ffmpeg.exe -hide_banner -i $p -i $a `
 -filter_complex `
@@ -26,6 +31,6 @@ ffmpeg.exe -hide_banner -i $p -i $a `
       drawtext=fontcolor=$UI_color :fontfile=$font :fontsize=h/10:text=$title[freq];
  [cover][freq]hstack[ui];
  [bg][ui]overlay=x=(W-w)/2:y=(H-h)/2[v]" `
--map '[v]' -map '1:a' -c:a copy -c:v hevc_qsv -preset:v 3 -global_quality 10 -look_ahead 1 -scenario 3 -shortest Freqs_A2V.mkv
+-map '[v]' -map '1:a' -c:a copy -c:v hevc_qsv -preset:v 3 -global_quality 10 -look_ahead 1 -scenario 3 -shortest $o
 
 Read-Host -Prompt 'Press Enter to exit'
