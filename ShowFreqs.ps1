@@ -9,8 +9,9 @@ $width = 2560
 $height = [int]($width*0.5625)  # 16:9; 0.75 for 4:3
 $UI_WH = [int]($width/2*0.8)
 # 标题（需指定字体文件，特殊字符需转义）
-$font = "font.ttf"
-$title = "A2V by FFmpeg"
+$font = "$env:windir\Fonts\times.ttf" 
+$title = "" # 留空则从标签获取
+if ($title -eq "") {$title = ffprobe.exe -v error -show_entries format_tags=title -of default=noprint_wrappers=1:nokey=1 $a}
 
 $filters = @"
 [0]
