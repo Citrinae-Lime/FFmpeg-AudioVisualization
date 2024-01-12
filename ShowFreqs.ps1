@@ -1,8 +1,8 @@
-# Replace "input -f null" with your file path
+# Replace with your file path
 # Input audio
-$a = "input -f null"
+$a = ""
 # Input image
-$p = "input -f null"
+$p = ""
 
 add-type -AssemblyName System.Drawing
 # Output resolution
@@ -21,7 +21,7 @@ else {$UI_color = "0xF4F4F4"}
 # If no title is given get it from the tag
 if ($title -eq "") {$title = ffprobe.exe -v error -show_entries format_tags=title -of default=noprint_wrappers=1:nokey=1 $a}
 
-$o = $a -replace '.flac|.wav|.mp3|.m4a','.mkv'
+$o = $a -replace '\.\w+$','.mkv'
 
 ffmpeg.exe -hide_banner -i $p -i $a `
 -filter_complex `
