@@ -25,14 +25,15 @@ foreach ($a in Get-ChildItem $audio -Exclude cover.*) {
 
      $o = $a -replace '\.\w+$','.mkv'
 
-     ffmpeg.exe -hide_banner -i $p -i $a `
-     -filter_complex `
+     ffmpeg.exe -init_hw_device qsv -hwaccel_output_format nv12 -hide_banner `
+     -i $p -i $a -filter_complex `
      "color=c=$($bg_color.name):s=$width x$height :r=60[bg],
-     [0]scale=-1:$UI_WH,pad=w=iw+$($width/10):color=$($bg_color.name)[cover],
+     [0]hwupload,format=qsv,scale_qsv=w=-1:h=$UI_WH,pad=w=iw+$($width/10):color=$($bg_color.name)[cover],
      [1:a]showfreqs=s=$UI_WH x$UI_WH :ascale=sqrt:colors=$UI_color :averaging=15:fscale=log,
-          drawtext=fontcolor=$($UI_color.Split('|')[0]):fontfile=$font :fontsize=h/10:text=$title[freq];
-     [cover][freq]hstack[ui];
-     [bg][ui]overlay=x=(W-w)/2:y=(H-h)/2[v]" `
+          drawtext=fontcolor=$($UI_color.Split('|')[0]):fontfile=$font :fontsize=h/10:text=$title,
+          hwupload,format=qsv[freq];
+     [cover][freq]hstack_qsv[ui];
+     [bg][ui]overlay_qsv=x=(overlay_iw-w)/2:y=(overlay_ih-h)/2[v]" `
      -map '[v]' -map '1:a' -c:a copy -c:v h264_qsv -preset:v 3 -global_quality 10 -look_ahead 1 -scenario 3 -shortest $o
 }
 
